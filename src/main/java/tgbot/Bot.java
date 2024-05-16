@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import tgbot.model.Config;
+import tgbot.model.Item;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -249,6 +250,25 @@ public class Bot extends TelegramLongPollingBot {
             sendPhoto.setReplyMarkup(inlineKeyboardMarkup);
         }
         sendPhoto.setPhoto(new InputFile(new File("/home/dmitry/Programming/PUNKSharingbot/src/main/resources/img.png")));
+        try {execute(sendPhoto);} catch (TelegramApiException e) {e.printStackTrace();}
+    }
+    private void sendItem(Message message, Item item, boolean withButton){
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setCaption(String.format("Название: %s\nКатегория: %s\nОписание: %s\nЦена: %s\nОбщежитие №%d\ntg: %s", item.getName(), item.getCategory(), item.getDescription(), item.getPrice(), item.getDormitory(), item.getTg()));
+        sendPhoto.setChatId(message.getChatId().toString());
+        if (withButton) {
+            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> inlineButtons = new ArrayList<>();
+            List<InlineKeyboardButton> inlineKeyboardButtonList = new ArrayList<>();
+            InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
+            inlineKeyboardButton.setText("Удалить");
+            inlineKeyboardButton.setCallbackData("delete");
+            inlineKeyboardButtonList.add(inlineKeyboardButton);
+            inlineButtons.add(inlineKeyboardButtonList);
+            inlineKeyboardMarkup.setKeyboard(inlineButtons);
+            sendPhoto.setReplyMarkup(inlineKeyboardMarkup);
+        }
+        sendPhoto.setPhoto(new InputFile(new File("/home/dmitry/Programming/PUNKSharingbot/src/main/resources/img_1.png")));
         try {execute(sendPhoto);} catch (TelegramApiException e) {e.printStackTrace();}
     }
     private void sendItem2(Message message, boolean withButton){
